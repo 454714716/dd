@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+
+
+	<bean id="packSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="packDataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<property name="mapperLocations" >
+			<array>
+				<value>classpath*:cn/itcast/ssm/mapper/*Mapper.xml</value>
+
+			</array>
+		</property>
+		<property name="typeAliasesPackage" value="cn.itcast.ssm" />
+	</bean>
+	
+	<bean id="packMapperScannerConfigure" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="packSqlSessionFactory"/>  
+		<property name="basePackage" value="cn.itcast.ssm.mapper" />
+	</bean>
+	<!-- 交易模块配置 start -->
+
+	<bean id="logFilter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+		<property name="statementExecutableSqlLogEnable" value="true" />
+	</bean>
+	<bean id="packDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${mysql.health.url}" />
+		<property name="username" value="${mysql.health.username}" />
+		<property name="password" value="${mysql.health.password}" />
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="1" />
+		<property name="maxActive" value="20" />
+		<property name="maxWait" value="60000" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+		<property name="filters" value="stat" />
+		<property name="proxyFilters">
+			<list>
+				<ref bean="logFilter" />
+			</list>
+		</property>
+	</bean>
+	<bean id="packTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="packDataSource" />
+	</bean>
+	<tx:advice id="packTxAdvice" transaction-manager="packTransactionManager">
+		<tx:attributes>
+			<tx:method name="patientExpectedTime" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="updateSplit" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="modify*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="handle*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="create*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="save*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="endConfCreate" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="endMedia" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="endJoin" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="beginService*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="appointServiceTime" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="finishService*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="prepareService" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="settleIncome" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="autoSettleIncome" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="checkAndAutoClose*" propagation="NEVER" />
+			<tx:method name="cancel*" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="abandonService" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="sendOvertimeMsg" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="executeFeeUpdate" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="autoResetDuration" propagation="NEVER" />
+			<tx:method name="sumbitCarePlanOrder" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="appendSendHealthCare" propagation="NEVER" rollback-for="Exception"/>
+			<tx:method name="appointTime" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="endPay" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="adjustOrderCareDate" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="autoSendHealthCare" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="invitePatient" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="confirmConsultation" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="resubmitConsultation" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="autoCloseOutPatient" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="cacheSendMessageRecord" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="addFreeReplyCount" propagation="REQUIRED" rollback-for="Exception"/>
+			
+			<tx:method name="delIncomesData" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="repairIncomes" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="autorConvertToNext" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="autoSettleNew" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="addIncomelog" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="settle" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="addRefundOrder" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="setAppointmentInfo" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="submitAppointmentOrder" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="setGroupHospital" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="hasIllCase" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="getIllCase" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="getDoctorAppointment" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="changeAppointmentTime" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="refuseAppointOrder" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="agreeAppointmentOrder" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="takeAppointmentOrder" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="processCreateOrder" propagation="REQUIRED" rollback-for="Exception"/>
+			
+			<tx:method name="getSettleList" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="getSettlIncomeDetailsList" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="setConsultationTime" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="cacheSessionMessageRecord" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="processNewOrder" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="handleClientInvokeWhenPaySuccess" propagation="REQUIRED" rollback-for="Exception"/>
+			<tx:method name="fixOldData" propagation="REQUIRED" rollback-for="Exception"/>
+
+
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+
+
+</beans>
