@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dachen.st.mapper.PCaseMapper" >
+  <resultMap id="BaseResultMap" type="com.dachen.st.po.PCase" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="check_in_id" property="checkInId" jdbcType="INTEGER" />
+    <result column="patient_id" property="patientId" jdbcType="INTEGER" />
+    <result column="patient_name" property="patientName" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="SMALLINT" />
+    <result column="birthday" property="birthday" jdbcType="BIGINT" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="hospital" property="hospital" jdbcType="VARCHAR" />
+    <result column="record_num" property="recordNum" jdbcType="VARCHAR" />
+    <result column="last_cure_time" property="lastCureTime" jdbcType="BIGINT" />
+    <result column="disease_id" property="diseaseId" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.dachen.st.po.PCaseWithBLOBs" extends="BaseResultMap" >
+    <result column="description" property="description" jdbcType="LONGVARCHAR" />
+    <result column="message" property="message" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, user_id, check_in_id, patient_id, patient_name, sex, birthday, phone, hospital, 
+    record_num, last_cure_time, disease_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    description, message
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.dachen.st.po.PCaseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from p_case
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.dachen.st.po.PCaseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from p_case
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from p_case
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from p_case
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.dachen.st.po.PCaseExample" >
+    delete from p_case
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.dachen.st.po.PCaseWithBLOBs" >
+    insert into p_case (id, user_id, check_in_id, 
+      patient_id, patient_name, sex, 
+      birthday, phone, hospital, 
+      record_num, last_cure_time, disease_id, 
+      description, message)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{checkInId,jdbcType=INTEGER}, 
+      #{patientId,jdbcType=INTEGER}, #{patientName,jdbcType=VARCHAR}, #{sex,jdbcType=SMALLINT}, 
+      #{birthday,jdbcType=BIGINT}, #{phone,jdbcType=VARCHAR}, #{hospital,jdbcType=VARCHAR}, 
+      #{recordNum,jdbcType=VARCHAR}, #{lastCureTime,jdbcType=BIGINT}, #{diseaseId,jdbcType=VARCHAR}, 
+      #{description,jdbcType=LONGVARCHAR}, #{message,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dachen.st.po.PCaseWithBLOBs" >
+    insert into p_case
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="checkInId != null" >
+        check_in_id,
+      </if>
+      <if test="patientId != null" >
+        patient_id,
+      </if>
+      <if test="patientName != null" >
+        patient_name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="hospital != null" >
+        hospital,
+      </if>
+      <if test="recordNum != null" >
+        record_num,
+      </if>
+      <if test="lastCureTime != null" >
+        last_cure_time,
+      </if>
+      <if test="diseaseId != null" >
+        disease_id,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="checkInId != null" >
+        #{checkInId,jdbcType=INTEGER},
+      </if>
+      <if test="patientId != null" >
+        #{patientId,jdbcType=INTEGER},
+      </if>
+      <if test="patientName != null" >
+        #{patientName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=SMALLINT},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="hospital != null" >
+        #{hospital,jdbcType=VARCHAR},
+      </if>
+      <if test="recordNum != null" >
+        #{recordNum,jdbcType=VARCHAR},
+      </if>
+      <if test="lastCureTime != null" >
+        #{lastCureTime,jdbcType=BIGINT},
+      </if>
+      <if test="diseaseId != null" >
+        #{diseaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.dachen.st.po.PCaseExample" resultType="java.lang.Integer" >
+    select count(*) from p_case
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="getAllCase"  resultType="map" >
+    select * from p_case
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update p_case
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkInId != null" >
+        check_in_id = #{record.checkInId,jdbcType=INTEGER},
+      </if>
+      <if test="record.patientId != null" >
+        patient_id = #{record.patientId,jdbcType=INTEGER},
+      </if>
+      <if test="record.patientName != null" >
+        patient_name = #{record.patientName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex,jdbcType=SMALLINT},
+      </if>
+      <if test="record.birthday != null" >
+        birthday = #{record.birthday,jdbcType=BIGINT},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hospital != null" >
+        hospital = #{record.hospital,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordNum != null" >
+        record_num = #{record.recordNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastCureTime != null" >
+        last_cure_time = #{record.lastCureTime,jdbcType=BIGINT},
+      </if>
+      <if test="record.diseaseId != null" >
+        disease_id = #{record.diseaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.message != null" >
+        message = #{record.message,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update p_case
+    set id = #{record.id,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      check_in_id = #{record.checkInId,jdbcType=INTEGER},
+      patient_id = #{record.patientId,jdbcType=INTEGER},
+      patient_name = #{record.patientName,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=SMALLINT},
+      birthday = #{record.birthday,jdbcType=BIGINT},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      hospital = #{record.hospital,jdbcType=VARCHAR},
+      record_num = #{record.recordNum,jdbcType=VARCHAR},
+      last_cure_time = #{record.lastCureTime,jdbcType=BIGINT},
+      disease_id = #{record.diseaseId,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=LONGVARCHAR},
+      message = #{record.message,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update p_case
+    set id = #{record.id,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      check_in_id = #{record.checkInId,jdbcType=INTEGER},
+      patient_id = #{record.patientId,jdbcType=INTEGER},
+      patient_name = #{record.patientName,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=SMALLINT},
+      birthday = #{record.birthday,jdbcType=BIGINT},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      hospital = #{record.hospital,jdbcType=VARCHAR},
+      record_num = #{record.recordNum,jdbcType=VARCHAR},
+      last_cure_time = #{record.lastCureTime,jdbcType=BIGINT},
+      disease_id = #{record.diseaseId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dachen.st.po.PCaseWithBLOBs" >
+    update p_case
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="checkInId != null" >
+        check_in_id = #{checkInId,jdbcType=INTEGER},
+      </if>
+      <if test="patientId != null" >
+        patient_id = #{patientId,jdbcType=INTEGER},
+      </if>
+      <if test="patientName != null" >
+        patient_name = #{patientName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=SMALLINT},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="hospital != null" >
+        hospital = #{hospital,jdbcType=VARCHAR},
+      </if>
+      <if test="recordNum != null" >
+        record_num = #{recordNum,jdbcType=VARCHAR},
+      </if>
+      <if test="lastCureTime != null" >
+        last_cure_time = #{lastCureTime,jdbcType=BIGINT},
+      </if>
+      <if test="diseaseId != null" >
+        disease_id = #{diseaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.dachen.st.po.PCaseWithBLOBs" >
+    update p_case
+    set user_id = #{userId,jdbcType=INTEGER},
+      check_in_id = #{checkInId,jdbcType=INTEGER},
+      patient_id = #{patientId,jdbcType=INTEGER},
+      patient_name = #{patientName,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=SMALLINT},
+      birthday = #{birthday,jdbcType=BIGINT},
+      phone = #{phone,jdbcType=VARCHAR},
+      hospital = #{hospital,jdbcType=VARCHAR},
+      record_num = #{recordNum,jdbcType=VARCHAR},
+      last_cure_time = #{lastCureTime,jdbcType=BIGINT},
+      disease_id = #{diseaseId,jdbcType=VARCHAR},
+      description = #{description,jdbcType=LONGVARCHAR},
+      message = #{message,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dachen.st.po.PCase" >
+    update p_case
+    set user_id = #{userId,jdbcType=INTEGER},
+      check_in_id = #{checkInId,jdbcType=INTEGER},
+      patient_id = #{patientId,jdbcType=INTEGER},
+      patient_name = #{patientName,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=SMALLINT},
+      birthday = #{birthday,jdbcType=BIGINT},
+      phone = #{phone,jdbcType=VARCHAR},
+      hospital = #{hospital,jdbcType=VARCHAR},
+      record_num = #{recordNum,jdbcType=VARCHAR},
+      last_cure_time = #{lastCureTime,jdbcType=BIGINT},
+      disease_id = #{diseaseId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
