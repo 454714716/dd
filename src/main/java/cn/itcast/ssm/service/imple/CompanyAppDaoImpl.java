@@ -14,11 +14,12 @@ public class CompanyAppDaoImpl    extends  BaseDAOImpl<CompanyApp> implements IC
     @Override
     public List<CompanyApp> getALL(Integer status) {
      Query<CompanyApp> query = dsForRW.createQuery(CompanyApp.class);
+        System.out.println("===========");
         if( status!=null  ){
             List<Integer> list = new ArrayList<>();
             list.add(status);
-               query.filter("status >", status);
-            // query.field("status").equal(status);
+            //   query.filter("status >", status);
+              query.field("status").equal(status);
 
         }
         ArrayList<CompanyApp> list = (ArrayList<CompanyApp>) query.asList();

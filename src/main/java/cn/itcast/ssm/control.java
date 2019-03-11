@@ -18,7 +18,7 @@ public class control {
     public JSONMessage getUserPageNoAdmin(@RequestParam  Integer idd ) {
         System.out.print("iddd=="+idd);
         System.out.print("iddd=="+ipCase);
-        return JSONMessage.success(ipCase.selectByPrimaryKey(idd));
+        return JSONMessage.success(ipCase.getAllCase());
 
     }
     @RequestMapping("/nologin/ddall")

@@ -18,4 +18,9 @@ public class IPCaseImple implements IPCase {
         return pCaseMapper.selectByPrimaryKey(id);
     }
 
+    @Override
+    public List<PCase> getAllCase() {
+        return pCaseMapper.getAllCase();
+    }
+
 }

@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface IPCase {
     PCaseWithBLOBs selectByPrimaryKey(Integer id);
+    List<PCase> getAllCase();
 }

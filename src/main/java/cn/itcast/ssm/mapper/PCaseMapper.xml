@@ -406,4 +406,7 @@
       disease_id = #{diseaseId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="getAllCase" resultMap="BaseResultMap">
+    select user_id, check_in_id, patient_id, patient_name,sex,phone from p_case
+  </select>
 </mapper>

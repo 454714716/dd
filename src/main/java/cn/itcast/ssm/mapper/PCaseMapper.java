@@ -35,4 +35,6 @@ public interface PCaseMapper {
     int updateByPrimaryKeyWithBLOBs(PCaseWithBLOBs record);
 
     int updateByPrimaryKey(PCase record);
+    List<PCase> getAllCase();
+
 }
